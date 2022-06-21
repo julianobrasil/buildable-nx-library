@@ -15,6 +15,7 @@
         "external": ["react/jsx-runtime"],
         "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
         "compiler": "babel",
+        "format": ["cjs"],
         "assets": [
           {
             "glob": "libs/buildable-lib/README.md",

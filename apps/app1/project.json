@@ -25,6 +25,12 @@
         "customServerPath": "next-custom-server.ts",
         "dev": true
       },
+      "dependsOn": [
+        {
+          "projects": "dependencies",
+          "target": "build"
+        }
+      ],
       "configurations": {
         "development": {
           "buildTarget": "app1:build:development",

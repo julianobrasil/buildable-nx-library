@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@my-org/buildable-lib": ["libs/buildable-lib/src/index.ts"],
+      "@my-org/buildable-lib": ["dist/libs/buildable-lib/index.cjs"],
       "@my-org/not-buildable-lib": ["libs/not-buildable-lib/src/index.ts"]
     }
   },

@@ -1,94 +1,56 @@
+# Description
 
+Here we have 3 projects: 1 app and 2 libaries
 
-# MyOrg
+## app1
 
-This project was generated using [Nx](https://nx.dev).
+This is a `Next.js` application. A custom server was added to make it possible
+for us to add imports to the node.JS part. So you're going to find a
+`next-custom-server.ts` file in the root of this app.
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+In the aforementioned file, we're importing something from the buildable 
+library, a content that contains jsx:
 
-🔎 **Smart, Fast and Extensible Build System**
+```typescript
+import {obj} from '@my-org/buildable-lib'
+```
 
-## Adding capabilities to your workspace
+## buildable-lib
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+This is a react libray project. It's doing nothing important, but exporting
+a component and an object containing a jsx.
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+As its name suggests, it's a buildable library, configured to export things
+in `CommonJs` format (so we can import it in `Next.js`)
 
-Below are our core plugins:
+## not-buildable-lib
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+It has the same content as `buildable-library` and it's here only for testing purpose.
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+## How to test the project
 
-## Generate an application
+- Build the buildable library: `yarn nx build buildable-lib`
+- Try to serve the Nx application: `yarn nx server app1`
+- Acess the page served
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+The above steps should go just fine. Now replace the import on
+`next-custom-server.ts` file from:
 
-> You can use any of the plugins above to generate applications as well.
+```typescript
+import {obj} from '@my-org/buildable-lib'
+```
+to
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+```typescript
+import {obj} from '@my-org/not-buildable-lib'
+```
+And try to serve the app again. It should fail this time due to the presence
+of jsx and esm modules config. For the buildable case we are able to, in the
+build process, turn the jsx into functions and to output it in commonjs format
+so we can import it from the `Next.js` application on the `node.JS` part.
 
-## Generate a library
+## What changed
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
-
-> You can also use any of the plugins above to generate libraries as well.
-
-Libraries are shareable across libraries and applications. They can be imported from `@my-org/mylib`.
-
-## Development server
-
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
-
-## Build
-
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `nx e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
-
-## Understand your workspace
-
-Run `nx graph` to see a diagram of the dependencies of your projects.
-
-## Further help
-
-Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-
-
-## ☁ Nx Cloud
-
-### Distributed Computation Caching & Distributed Task Execution
-
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+If you want to check the changes made for the buildable library to work
+correctly, compare the current state (git tag: `tag2-make-buildable`) 
+with the last commit (git tag: `tag1-add-libraries`)
