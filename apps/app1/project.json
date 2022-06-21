@@ -2,6 +2,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/app1",
   "projectType": "application",
+  "implicitDependencies": ["buildable-lib"],
   "targets": {
     "build": {
       "executor": "@nrwl/next:build",
@@ -25,6 +26,12 @@
         "customServerPath": "next-custom-server.ts",
         "dev": true
       },
+      "dependsOn": [
+        {
+          "projects": "dependencies",
+          "target": "build"
+        }
+      ],
       "configurations": {
         "development": {
           "buildTarget": "app1:build:development",
